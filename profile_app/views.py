@@ -5,9 +5,11 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
 class UserProfileList(APIView):
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
         query_profiles = Profile.objects.all()
@@ -15,6 +17,7 @@ class UserProfileList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserProfileDetail(APIView):
+    # permission_classes = [IsAuthenticated]
     """
     Retrieve a user's profile details, including followers and following counts.
     """
@@ -33,6 +36,7 @@ class UserProfileDetail(APIView):
             
 
 class FollowUserView(APIView):
+    # permission_classes = [IsAuthenticated]
     def post(self, request, pk):
         try:
             user_to_follow = User.objects.get(pk=pk)
@@ -49,6 +53,8 @@ class FollowUserView(APIView):
             return Response({"error": "user not found"}, status=404)
         
 class FollowDelete(APIView):
+    # permission_classes = [IsAuthenticated]
+    
     def delete(self, request, pk):
         try:
             user_to_unfollow = User.objects.get(pk=pk)
