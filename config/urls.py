@@ -19,8 +19,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('profile_app.urls')),
-    path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
-    path('api-auth/', include('dj_rest_auth.urls')),
-    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),  # if using registration
+    path('api/', include('profile_app.urls')),  # Include profile_app urls
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),  # for DRF authentication
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),  # Main URL for dj-rest-auth
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),  # If you're using registration
 ]
+
