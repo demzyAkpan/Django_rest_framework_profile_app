@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 class ProfileSerializer(serializers.ModelSerializer):
-    followers_count = serializers.ReadOnlyField(source='followers_count')
-    following_count = serializers.ReadOnlyField(source='following_count')
+    followers_count = serializers.ReadOnlyField()
+    following_count = serializers.ReadOnlyField()
 
     class Meta:
         model = Profile

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Profile
+from .models import Profile, Follow
 from .serializers import ProfileSerializer
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -32,7 +32,7 @@ class UserProfileDetail(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
             
 
-class Follow(APIView):
+class FollowUserView(APIView):
     def post(self, request, pk):
         try:
             user_to_follow = User.objects.get(pk=pk)
