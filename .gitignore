@@ -1,0 +1,5 @@
+# Virtual environment
+/monc
+__pycache__/
+
+
