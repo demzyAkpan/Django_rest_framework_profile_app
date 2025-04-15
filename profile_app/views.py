@@ -21,4 +21,19 @@ class UserProfileDetail(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
             
 
-class Follow
+class Follow(APIView):
+    def post(self, request, pk):
+        try:
+            user_to_follow = User.objects.get(pk=pk)
+            if request.user == user_to_follow:
+                return Response({"error": "you cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            follow, created = Follow.objects.get_or_create(follower=request.user, following= user_to_follow)
+
+            if created:
+                return Response({"message":f'you are now following {user_to_follow}'})
+            return Response({"message":"you are already following  this user."})
+        
+        except User.DoesNotExist:
+            return Response({"error": "user not found"}, status=404)
+
