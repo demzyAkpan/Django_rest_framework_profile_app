@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
-class UserProileList(APIView):
+class UserProfileList(APIView):
 
     def get(self, request):
         query_profiles = Profile.objects.all()
@@ -15,9 +15,20 @@ class UserProileList(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserProfileDetail(APIView):
+    """
+    Retrieve a user's profile details, including followers and following counts.
+    """
     def get(self, request, pk):
         query_profile = get_object_or_404(Profile, pk=pk)
         serializer = ProfileSerializer(query_profile)
+
+        data = serializer.data
+        data['followers_count'] = query_profile.followers_count
+        data['following_count'] = query_profile.following_count
+        
+
+
+
         return Response(serializer.data, status=status.HTTP_200_OK)
             
 
@@ -33,6 +44,21 @@ class Follow(APIView):
             if created:
                 return Response({"message":f'you are now following {user_to_follow}'})
             return Response({"message":"you are already following  this user."})
+        
+        except User.DoesNotExist:
+            return Response({"error": "user not found"}, status=404)
+        
+class FollowDelete(APIView):
+    def delete(self, request, pk):
+        try:
+            user_to_unfollow = User.objects.get(pk=pk)
+            
+            follow = Follow.objects.filter(follower=request.user, following=user_to_unfollow) #
+
+            if follow.exists():
+                follow.delete()
+                return Response({"message":f'you have unfollowed {user_to_unfollow}'})
+            return Response({"message":"you are not following this user."})
         
         except User.DoesNotExist:
             return Response({"error": "user not found"}, status=404)
